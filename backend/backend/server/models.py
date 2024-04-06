@@ -15,8 +15,6 @@ class Todo(models.Model):
         ('in-progress', 'In Progress'),
         ('done', 'Done'),
     )
-
-    id = models.IntegerField(primary_key=True, auto_created=True)
     user_id = models.ForeignKey(TodoUser, on_delete=models.CASCADE)
     todo = models.CharField(max_length=200)
     description = models.TextField()
