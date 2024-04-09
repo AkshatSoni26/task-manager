@@ -107,7 +107,7 @@ function Register() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Password:</label>
+                <label htmlFor="password">Confirm Password:</label>
                 <div className="d-flex align-items-center">
                   <input
                     type={!isShow1 ? "password" : "text"}
