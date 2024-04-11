@@ -14,16 +14,6 @@ function Todos() {
   const [loading, setLoading] = useState(false)
   const data = useSelector(state => state?.todo?.todos)
 
-  data.sort((a, b) => {
-    if (a.status === "in-progress" && b.status !== "in-progress") {
-        return -1; // "in-progress" comes before others
-    } else if (a.status !== "in-progress" && b.status === "in-progress") {
-        return 1; // "in-progress" comes after others
-    } else {
-        return 0; // Maintain current order
-    }
-});
-
   return (
     <div>
       {

@@ -62,6 +62,7 @@ function TodoForm() {
     const tit = title;
     if (tit.length == 0) {
       setShowToast(true);
+      setDisable(false)
       return;
     }
 
