@@ -12,10 +12,17 @@ function Todos() {
 
   // const [data,setData] = useState([])
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
   const data = useSelector(state => state?.todo?.todos)
 
-  console.log('data  =====>', data)
+  data.sort((a, b) => {
+    if (a.status === "in-progress" && b.status !== "in-progress") {
+        return -1; // "in-progress" comes before others
+    } else if (a.status !== "in-progress" && b.status === "in-progress") {
+        return 1; // "in-progress" comes after others
+    } else {
+        return 0; // Maintain current order
+    }
+});
 
   return (
     <div>

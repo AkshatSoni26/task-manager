@@ -24,6 +24,8 @@ const todoreducer = (state = initialState, action) => {
       };
 
     case TODO_REDUCERES.TODO_DATA:
+
+    const data = action.payload
       return {
         ...state,
         todoData: action.payload,

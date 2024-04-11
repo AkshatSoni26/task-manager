@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import routes, { backed_urls } from "../routes";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../axiosclient";
-import { Category } from "../types/Types.ts";
+import { Category, Priorities, priorities } from "../types/Types.ts";
 
 function TodoForm() {
   const isForm = useSelector((state) => state.todo.isForm);
@@ -23,7 +23,8 @@ function TodoForm() {
   const [showToast, setShowToast] = useState(false);
   const [disable, setDisable] = useState(false);
   const [date, setDate] = useState('')
-  const [categorie, setCategorie] = useState('')
+  const [categorie, setCategorie] = useState(Category.Personal)
+  const [priorities, setPriorities] = useState(Priorities.low)
 
 
   useEffect(() => {
@@ -38,7 +39,11 @@ function TodoForm() {
     }
 
     if (todoData?.catigorie) {
-      setDate(todoData?.catigorie)
+      setCategorie(todoData?.catigorie)
+    }
+
+    if (todoData?.priorities) {
+      setPriorities(todoData?.priorities)
     }
 
   }, [todoData]);
@@ -48,6 +53,7 @@ function TodoForm() {
     dispatch({ type: TODO_REDUCERES.IS_FORM });
     dispatch({ type: TODO_REDUCERES.TODO_DATA, payload: {} });
   };
+
   const handleShow = () => dispatch({ type: TODO_REDUCERES.IS_FORM });
 
   const handleSave = async () => {
@@ -69,7 +75,8 @@ function TodoForm() {
             todo: tit,
             description: desprition,
             due_date: date,
-            categorie:categorie
+            catigorie:categorie,
+            priorities
           })
           .then((data) => {
             console.log("data ===>", data);
@@ -155,6 +162,15 @@ function TodoForm() {
               <option value={Category.Work}  selected={categorie == Category.Work}>{Category.Work}</option>
               <option value={Category.Errands} selected={categorie == Category.Errands}>{Category.Errands}</option>
               <option value={Category.Other} selected={categorie == Category.Other}>{Category.Other}</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Priorities of taks</Form.Label>
+            <Form.Select onChange={(e) => {setPriorities(e.target.value)}}>
+            <option value={Priorities.low} selected={priorities == Priorities.low} >{Priorities.low}</option>
+            <option value={Priorities.medium} selected={priorities == Priorities.medium} >{Priorities.medium}</option>
+              <option value={Priorities.high} selected={priorities == Priorities.high} >{Priorities.high}</option>
             </Form.Select>
           </Form.Group>
 

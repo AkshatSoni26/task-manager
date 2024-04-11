@@ -12,93 +12,107 @@ function Todo({ data }) {
   const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = useState(false);
-  const [isDelete, setIsDelete] = useState(false)
+  const [isDelete, setIsDelete] = useState(false);
 
   const id = data?.todo_id;
 
-  useEffect(
-    () => {
-      setIsChecked(!(data?.status == "in-progress"))
-    }, [data]
-  )
+  useEffect(() => {
+    setIsChecked(!(data?.status == "in-progress"));
+  }, [data]);
 
   const handleCheckboxChange = (event) => {
     // if (event.target.checked) {
-    axiosClient.patch(backed_urls.updateStatus, {
-      todo_id: id,
-      new_status: event.target.checked ? "done" : 'in-progress',
-    }).then(
-      (data) => {
-        console.log("update status ====>", data)
+    axiosClient
+      .patch(backed_urls.updateStatus, {
+        todo_id: id,
+        new_status: event.target.checked ? "done" : "in-progress",
+      })
+      .then((data) => {
+        console.log("update status ====>", data);
         setIsChecked(event.target.checked);
-      }
-    ).catch(
-      (errr) => {
-        console.log("err in updaing status===>", errr)
-      }
-    )
+      })
+      .catch((errr) => {
+        console.log("err in updaing status===>", errr);
+      });
     // }
     setIsChecked(event.target.checked);
   };
 
   const handleForm = () => {
-    dispatch({ type: TODO_REDUCERES.IS_FORM })
-    dispatch({ type: TODO_REDUCERES.TODO_DATA, payload: { ...data, heading: 'Update Todo', isNew: false } })
+    dispatch({ type: TODO_REDUCERES.IS_FORM });
+    dispatch({
+      type: TODO_REDUCERES.TODO_DATA,
+      payload: { ...data, heading: "Update Todo", isNew: false },
+    });
   };
 
   return (
-    <div className="d-flex todo-item p-3 m-3 rounded justify-content-between" style={{ maxWidth: '500px' }}>
-
+    <div
+      className="d-flex todo-item p-3 m-3 rounded justify-content-between"
+      style={{ maxWidth: "500px" }}
+    >
       <Confimation show={isDelete} setShow={setIsDelete} id={id} />
       <TodoForm />
 
-      <div className="d-flex align-items-center " style={{ maxWidth: '300px' }}>
-        <div className="me-2" >
+      <div className="d-flex align-items-center " style={{ maxWidth: "300px" }}>
+        <div className="me-2">
           <input
             type="checkbox"
             checked={isChecked}
             onChange={handleCheckboxChange}
           />
         </div>
-        <div
-          className="todo-details mx-2"
-
-        >
-          <h4 className={isChecked == true ? "text-decoration-line-through" : ""}>
+        <div className="todo-details mx-2">
+          <h4
+            className={isChecked == true ? "text-decoration-line-through" : ""}
+          >
             {data?.todo}
           </h4>
-          <p className={isChecked == true ? "text-decoration-line-through" : ""}>
+          <p
+            className={isChecked == true ? "text-decoration-line-through" : ""}
+          >
             {data?.description}
           </p>
         </div>
       </div>
 
-      <div className="todo-status mx-2 d-flex flex-column justify-content-between" style={{ fontSize: '12px' }}>
+      <div
+        className="todo-status mx-2 d-flex flex-column justify-content-between"
+        style={{ fontSize: "12px" }}
+      >
         <div>
           <div>
-
             <strong>Status:</strong>{" "}
-            <span
-              style={{ color: !isChecked ? "red" : "green" }}
-            >
-
-              {!isChecked ? 'in-progress' : 'done'}
+            <span style={{ color: !isChecked ? "red" : "green" }}>
+              {!isChecked ? "in-progress" : "done"}
             </span>
           </div>
-          {
-            data?.due_date
-            &&
+          {data?.due_date && (
             <div>
               <strong>Due Date:</strong>{" "}
-              <span
-                style={{ color: !isChecked ? "red" : "green" }}
-              >
-
+              <span style={{ color: !isChecked ? "red" : "green" }}>
                 {data?.due_date}
               </span>
             </div>
-          }
+          )}
+          {data?.catigorie && (
+            <div>
+              <strong>Catgories:</strong>{" "}
+              <span style={{ color: !isChecked ? "red" : "green" }}>
+                {data?.catigorie}
+              </span>
+            </div>
+          )}
 
+          {data?.priorities && (
+            <div>
+              <strong>Priorities:</strong>{" "}
+              <span style={{ color: !isChecked ? "red" : "green" }}>
+                {data?.priorities}
+              </span>
+            </div>
+          )}
+          
         </div>
         <div className="text-end d-flex">
           <FaRegEdit

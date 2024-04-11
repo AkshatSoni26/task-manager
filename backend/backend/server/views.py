@@ -85,7 +85,7 @@ def get_todos(request):
         if user:
             # Retrieve todos associated with the user
             todos = Todo.objects.filter(user_id=user_id)
-            todo_list = [{'todo': todo.todo,'todo_id':todo.id , 'description': todo.description, 'status': todo.status, 'due_date':todo.due_date, 'catigorie':todo.catigorie} for todo in todos]
+            todo_list = [{'todo': todo.todo,'todo_id':todo.id , 'description': todo.description, 'status': todo.status, 'due_date':todo.due_date, 'catigorie':todo.catigorie, 'priorities':todo.priorities} for todo in todos]
             return JsonResponse({'todos': todo_list}, status=200)
         else:
             return JsonResponse({'message': 'User not found.', 'status': 404}, status=404)
@@ -104,7 +104,8 @@ def create_todo(request):
         description = data.get('description')
         status = data.get('status', 'in-progress')  # Default to 'in-progress' if status is not provided
         due_date = data.get('due_date')
-        catigorie = data.get('catigorie', 'other')
+        catigorie = data.get('catigorie')
+        priorities = data.get('priorities')
 
         print("data ====>", data)
 
@@ -117,7 +118,7 @@ def create_todo(request):
 
         if user:
             # Create new todo
-            todo = Todo.objects.create(user_id=user, todo=todo_text, description=description, status=status, due_date=due_date, catigorie=catigorie)
+            todo = Todo.objects.create(user_id=user, todo=todo_text, description=description, status=status, due_date=due_date, catigorie=catigorie, priorities=priorities)
             return JsonResponse({'message': 'Todo created successfully.', 'todo_id': todo.id}, status=201)
         else:
             return JsonResponse({'message': 'User not found.', 'status': 404}, status=404)
