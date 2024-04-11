@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 
 
@@ -9,6 +8,7 @@ class TodoUser(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Todo(models.Model):
     STATUS_CHOICES = (
@@ -22,4 +22,3 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.todo
-

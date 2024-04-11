@@ -1,0 +1,6 @@
+export const TODO_REDUCERES = {
+    IS_FORM : 'IS_FORM',
+    TODOS:'TODOS',
+    TODO_DATA:'TODO_DATA',
+    TODO_FILTER:'TODO_FILTER'
+}
