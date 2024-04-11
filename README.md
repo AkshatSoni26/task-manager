@@ -58,3 +58,7 @@ This will start the backend server.
 This will start the frontend project at localhost:3000.
 
 Following these steps will set up both the backend and frontend parts of the project.
+
+## ScreenShot:-
+
+![Todos](./images/image.png)  
