@@ -24,63 +24,83 @@ function Todo({ data }) {
 
   const handleCheckboxChange = (event) => {
     // if (event.target.checked) {
-      axiosClient.patch(backed_urls.updateStatus, {
-        todo_id: id,
-        new_status: event.target.checked ? "done": 'in-progress',
-      }).then(
-        (data) => {
-          console.log("update status ====>", data)
-          setIsChecked(event.target.checked);
-        }
-      ).catch(
-        (errr) => {
-          console.log("err in updaing status===>", errr)
-        }
-      )
+    axiosClient.patch(backed_urls.updateStatus, {
+      todo_id: id,
+      new_status: event.target.checked ? "done" : 'in-progress',
+    }).then(
+      (data) => {
+        console.log("update status ====>", data)
+        setIsChecked(event.target.checked);
+      }
+    ).catch(
+      (errr) => {
+        console.log("err in updaing status===>", errr)
+      }
+    )
     // }
     setIsChecked(event.target.checked);
   };
 
   const handleForm = () => {
     dispatch({ type: TODO_REDUCERES.IS_FORM })
-    dispatch({ type: TODO_REDUCERES.TODO_DATA, payload: {...data, heading:'Update Todo', isNew: false} })
+    dispatch({ type: TODO_REDUCERES.TODO_DATA, payload: { ...data, heading: 'Update Todo', isNew: false } })
   };
 
   return (
-    <div className="d-flex todo-item p-3 m-3 rounded">
+    <div className="d-flex todo-item p-3 m-3 rounded justify-content-between" style={{ maxWidth: '500px' }}>
 
       <Confimation show={isDelete} setShow={setIsDelete} id={id} />
       <TodoForm />
-      
-      <div className="ms-1 me-3">
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-        />
-      </div>
-      <div
-        className="todo-details mx-2"
-        style={{ minWidth: "100px", maxWidth: "400px" }}
-      >
-        <h4 className={isChecked == true ? "text-decoration-line-through" : ""}>
-          {data?.todo}
-        </h4>
-        <p className={isChecked == true ? "text-decoration-line-through" : ""}>
-          {data?.description}
-        </p>
-      </div>
-      <div className="todo-status mx-2 d-flex flex-column justify-content-between">
-        <div>
-          <strong>Status:</strong>{" "}
-          <span
-            style={{ color: !isChecked ? "red" : "green" }}
-          >
-            
-            {!isChecked ? 'in-progress' :'done'}
-          </span>
+
+      <div className="d-flex align-items-center " style={{ maxWidth: '300px' }}>
+        <div className="me-2" >
+          <input
+            type="checkbox"
+            checked={isChecked}
+            onChange={handleCheckboxChange}
+          />
         </div>
-        <div className="text-end">
+        <div
+          className="todo-details mx-2"
+
+        >
+          <h4 className={isChecked == true ? "text-decoration-line-through" : ""}>
+            {data?.todo}
+          </h4>
+          <p className={isChecked == true ? "text-decoration-line-through" : ""}>
+            {data?.description}
+          </p>
+        </div>
+      </div>
+
+      <div className="todo-status mx-2 d-flex flex-column justify-content-between" style={{ fontSize: '12px' }}>
+        <div>
+          <div>
+
+            <strong>Status:</strong>{" "}
+            <span
+              style={{ color: !isChecked ? "red" : "green" }}
+            >
+
+              {!isChecked ? 'in-progress' : 'done'}
+            </span>
+          </div>
+          {
+            data?.due_date
+            &&
+            <div>
+              <strong>Due Date:</strong>{" "}
+              <span
+                style={{ color: !isChecked ? "red" : "green" }}
+              >
+
+                {data?.due_date}
+              </span>
+            </div>
+          }
+
+        </div>
+        <div className="text-end d-flex">
           <FaRegEdit
             size={20}
             style={{ cursor: "pointer" }}

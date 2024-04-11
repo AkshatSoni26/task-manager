@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import routes, { backed_urls } from "../routes";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../axiosclient";
+import { Category } from "../types/Types.ts";
 
 function TodoForm() {
   const isForm = useSelector((state) => state.todo.isForm);
@@ -21,6 +22,9 @@ function TodoForm() {
   const [desprition, setDesprition] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [disable, setDisable] = useState(false);
+  const [date, setDate] = useState('')
+  const [categorie, setCategorie] = useState('')
+
 
   useEffect(() => {
     if (todoData?.todo) {
@@ -29,6 +33,14 @@ function TodoForm() {
     if (todoData?.description) {
       setDesprition(todoData?.description);
     }
+    if (todoData?.due_date) {
+      setDate(todoData?.due_date)
+    }
+
+    if (todoData?.catigorie) {
+      setDate(todoData?.catigorie)
+    }
+
   }, [todoData]);
 
   const handleClose = () => {
@@ -56,6 +68,8 @@ function TodoForm() {
             user_id: user,
             todo: tit,
             description: desprition,
+            due_date: date,
+            categorie:categorie
           })
           .then((data) => {
             console.log("data ===>", data);
@@ -82,7 +96,7 @@ function TodoForm() {
           });
       }
 
-       await axiosClient
+      await axiosClient
         .post(backed_urls.getToods, {
           user_id: user,
         })
@@ -101,51 +115,73 @@ function TodoForm() {
   };
 
   return (
-    <div>
-      <Modal show={isForm} onHide={handleClose} centered>
-        <MessageToast show={showToast} setShow={setShowToast} />
-        <Modal.Header closeButton>
-          <Modal.Title>{todoData?.heading}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="title of todo"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                autoFocus
-                required
-                disabled={disable}
-              />
-            </Form.Group>
+    <Modal show={isForm} onHide={handleClose} centered>
+      <MessageToast show={showToast} setShow={setShowToast} />
+      <Modal.Header closeButton>
+        <Modal.Title>{todoData?.heading}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="title of todo"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              autoFocus
+              required
+              disabled={disable}
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>Desprition</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Desprition of todo"
-                value={desprition}
-                onChange={(e) => setDesprition(e.target.value)}
-                disabled={disable}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} disabled={disable}>
+          <Form.Group className="mb-3">
+            <Form.Label>Desprition</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Desprition of todo"
+              value={desprition}
+              onChange={(e) => setDesprition(e.target.value)}
+              disabled={disable}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Categories</Form.Label>
+            <Form.Select onChange={(e) => {setCategorie(e.target.value)}}>
+              <option value={Category.Personal} selected={categorie == Category.Personal} >{Category.Personal}</option>
+              <option value={Category.Work}  selected={categorie == Category.Work}>{Category.Work}</option>
+              <option value={Category.Errands} selected={categorie == Category.Errands}>{Category.Errands}</option>
+              <option value={Category.Other} selected={categorie == Category.Other}>{Category.Other}</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Due Date</Form.Label>
+            <Form.Control
+              type="date"
+              placeholder="Desprition of todo"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              disabled={disable}
+            />
+          </Form.Group>
+
+        </Form>
+      </Modal.Body>
+      <Modal.Footer >
+        <div className="d-flex w-100">
+          <Button variant="secondary" className="m-2" onClick={handleClose} disabled={disable}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSave} disabled={disable}>
+          <Button variant="primary" className="m-2" onClick={handleSave} disabled={disable}>
             Save Changes
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        </div>
+      </Modal.Footer>
+    </Modal>
   );
 }
 
